@@ -5,4 +5,8 @@
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="AppTheme.StartStyle" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
 </resources>
