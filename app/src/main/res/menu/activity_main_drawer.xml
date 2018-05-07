@@ -5,13 +5,17 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/mymessages"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="发言" />
+            android:title="@string/mymessgaes" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/settings"
             android:icon="@drawable/ic_menu_manage"
-            android:title="设置 " />
+            android:title="@string/action_settings" />
+        <item
+            android:id = "@+id/tcp"
+            android:icon = "@drawable/ic_menu_camera"
+            android:title="@string/socket"/>
     </group>
 
     <item android:title="Communicate">

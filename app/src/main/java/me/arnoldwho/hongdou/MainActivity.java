@@ -81,10 +81,12 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_slideshow) {
+        if (id == R.id.mymessages) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.settings) {
 
+        } else if(id == R.id.tcp){
+            startActivity(new Intent(MainActivity.this, SocketActivity.class));
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
