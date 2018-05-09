@@ -13,9 +13,9 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/action_settings" />
         <item
-            android:id = "@+id/tcp"
+            android:id = "@+id/login"
             android:icon = "@drawable/ic_menu_camera"
-            android:title="@string/socket"/>
+            android:title="@string/login"/>
     </group>
 
     <item android:title="Communicate">
