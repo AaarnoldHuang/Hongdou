@@ -13,9 +13,14 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/action_settings" />
         <item
-            android:id = "@+id/login"
-            android:icon = "@drawable/ic_menu_camera"
-            android:title="@string/login"/>
+            android:id="@+id/login"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/loginmenu"/>
+        <item
+            android:id="@+id/signup"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/signupmenu" />
+
     </group>
 
     <item android:title="Communicate">

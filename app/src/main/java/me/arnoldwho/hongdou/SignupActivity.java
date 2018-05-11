@@ -1,6 +1,7 @@
 package me.arnoldwho.hongdou;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -17,29 +19,41 @@ import java.net.Socket;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class LoginActivity extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity {
 
+    private static final String TAG = "SignupActivity";
     private OutputStream outputStream;
     public Socket socket;
     MySocket mySocket = new MySocket();
     String response;
-    int flags = 1;
 
     @BindView(R.id.input_name) EditText _nameText;
     @BindView(R.id.input_password) EditText _passwordText;
+    @BindView(R.id.input_reEnterPassword) EditText _reEnterPasswordText;
     @BindView(R.id.btn_signup) Button _signupButton;
+    @BindView(R.id.link_login) TextView _loginLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
         new Thread(connect).start();
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login();
+                signup();
+            }
+        });
+
+        _loginLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
     }
@@ -54,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
                 onSignupSuccess();
             }
             else if (val.equals("No")){
-                //final int flags = 0;
                 onSignupFailed();
             }
         }
@@ -71,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
-    Runnable loginsocket = new Runnable() {
+    Runnable signupsocket = new Runnable() {
         @Override
         public void run() {
 
@@ -81,9 +94,9 @@ public class LoginActivity extends AppCompatActivity {
             final String name = _nameText.getText().toString();
             final String password = _passwordText.getText().toString();
 
-            response = mySocket.getResponse("/login", socket);
+            response = mySocket.getResponse("/newUser", socket);
             if (response.equals("/sure")){
-                String str = name + " " + password;
+                String str = "Name=" + name + ";;" + "Passwd=" + password + ";;" +"Sex=" + "male";
                 response = mySocket.getResponse(str, socket);
                 if (response.equals("/Successed")){
                     Message msg = new Message();
@@ -104,17 +117,19 @@ public class LoginActivity extends AppCompatActivity {
     };
 
 
-    public void login() {
+    public void signup() {
+        if (!validate()) {
+            onSignupFailed();
+            return;
+        }
         _signupButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Loging...");
+        progressDialog.setMessage("Creating Account...");
         progressDialog.show();
-        new Thread(loginsocket).start();
-        if (flags == 0){
-            progressDialog.dismiss();}
+        new Thread(signupsocket).start();
     }
 
 
@@ -125,8 +140,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onSignupFailed() {
-        flags = 0;
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
         _signupButton.setEnabled(true);
     }
 
@@ -135,6 +148,7 @@ public class LoginActivity extends AppCompatActivity {
 
         String name = _nameText.getText().toString();
         String password = _passwordText.getText().toString();
+        String reEnterPassword = _reEnterPasswordText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
             _nameText.setError("at least 3 characters");
@@ -148,6 +162,13 @@ public class LoginActivity extends AppCompatActivity {
             valid = false;
         } else {
             _passwordText.setError(null);
+        }
+
+        if (reEnterPassword.isEmpty() || reEnterPassword.length() < 4 || reEnterPassword.length() > 10 || !(reEnterPassword.equals(password))) {
+            _reEnterPasswordText.setError("Password Do not match");
+            valid = false;
+        } else {
+            _reEnterPasswordText.setError(null);
         }
 
         return valid;

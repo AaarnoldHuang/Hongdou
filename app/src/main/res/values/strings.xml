@@ -5,7 +5,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
     <string name="mymessgaes">My Messages</string>
-    <string name="login">Sign up</string>
+    <string name="loginmenu">Sign in</string>
+    <string name="signupmenu">Sign Up</string>
     <string name="title_activity_socket">SocketActivity</string>
     <string name="title_activity_login">Sign in</string>
 
@@ -21,4 +22,12 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!--String related to Singup -->
+    <string name="signupUsername">Name</string>
+    <string name="signupPassword">Password</string>
+    <string name="signupEmail">Email</string>
+    <string name="createaccount">Create Account</string>
+    <string name="gotologin">Already a member? Login</string>
+    <string name="reenterpassword">Re-enter Password</string>
 </resources>

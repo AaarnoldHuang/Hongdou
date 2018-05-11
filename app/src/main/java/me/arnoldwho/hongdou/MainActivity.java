@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if(id == R.id.login){
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        } else if (id == R.id.signup) {
+            startActivity(new Intent(MainActivity.this, SignupActivity.class));
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
