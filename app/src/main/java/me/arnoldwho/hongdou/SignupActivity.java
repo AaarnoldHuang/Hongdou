@@ -2,18 +2,16 @@ package me.arnoldwho.hongdou;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.Socket;
 
 import butterknife.BindView;
@@ -21,17 +19,21 @@ import butterknife.ButterKnife;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private static final String TAG = "SignupActivity";
-    private OutputStream outputStream;
     public Socket socket;
     MySocket mySocket = new MySocket();
     String response;
+    String str;
+    private boolean manSelected = false;
+    private boolean womanSelected = false;
 
     @BindView(R.id.input_name) EditText _nameText;
     @BindView(R.id.input_password) EditText _passwordText;
     @BindView(R.id.input_reEnterPassword) EditText _reEnterPasswordText;
     @BindView(R.id.btn_signup) Button _signupButton;
     @BindView(R.id.link_login) TextView _loginLink;
+    @BindView(R.id.signupinfo) TextView _signupinfo;
+    @BindView(R.id.icon_man) ImageView _iconMan;
+    @BindView(R.id.icon_woman) ImageView _iconWoman;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,26 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+        _iconMan.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                _iconMan.setImageResource(R.drawable.ic_man_selected);
+                _iconWoman.setImageResource(R.drawable.ic_women);
+                manSelected = true;
+                womanSelected = false;
+            }
+        });
+
+        _iconWoman.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                _iconMan.setImageResource(R.drawable.ic_man);
+                _iconWoman.setImageResource(R.drawable.ic_women_selected);
+                manSelected = false;
+                womanSelected = true;
+            }
+        });
+
         _loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,21 +79,6 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
     }
-
-    Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            Bundle data = msg.getData();
-            String val = data.getString("value");
-            if (val.equals("Yes")){
-                onSignupSuccess();
-            }
-            else if (val.equals("No")){
-                onSignupFailed();
-            }
-        }
-    };
 
     Runnable connect = new Runnable() {
         @Override
@@ -84,63 +91,58 @@ public class SignupActivity extends AppCompatActivity {
         }
     };
 
-    Runnable signupsocket = new Runnable() {
-        @Override
-        public void run() {
-
-            if (!socket.isConnected()){
-                new Thread(connect).start();
-            }
-            final String name = _nameText.getText().toString();
-            final String password = _passwordText.getText().toString();
-
-            response = mySocket.getResponse("/newUser", socket);
-            if (response.equals("/sure")){
-                String str = "Name=" + name + ";;" + "Passwd=" + password + ";;" +"Sex=" + "male";
-                response = mySocket.getResponse(str, socket);
-                if (response.equals("/Successed")){
-                    Message msg = new Message();
-                    Bundle data = new Bundle();
-                    data.putString("value", "Yes");
-                    msg.setData(data);
-                    handler.sendMessage(msg);
-                }
-                else {
-                    Message msg = new Message();
-                    Bundle data = new Bundle();
-                    data.putString("value", "No");
-                    msg.setData(data);
-                    handler.sendMessage(msg);
-                }
-            }
-        }
-    };
-
-
     public void signup() {
         if (!validate()) {
-            onSignupFailed();
             return;
         }
-        _signupButton.setEnabled(false);
-
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
-        new Thread(signupsocket).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (!socket.isConnected()){
+                    new Thread(connect).start();
+                }
+                final String name = _nameText.getText().toString();
+                final String password = _passwordText.getText().toString();
+
+                response = mySocket.getResponse("/newUser", socket);
+                if (response.equals("/sure")){
+                    if (manSelected && !womanSelected){
+                        str = "Name=" + name + ";;" + "Passwd=" + password + ";;" +"Sex=" + "male";
+                    } else if (!manSelected && womanSelected){
+                        str = "Name=" + name + ";;" + "Passwd=" + password + ";;" +"Sex=" + "female";
+                    }
+                    response = mySocket.getResponse(str, socket);
+                    if (response.equals("/Successed")){
+                        saveInfo();
+                        progressDialog.dismiss();
+                        try{
+                            socket.close();
+                        } catch (IOException e){
+                            e.printStackTrace();
+                        }
+                        startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                        //finish();
+                    }
+                    else {
+                        progressDialog.dismiss();
+                        _signupinfo.setText("Wrong Password!");
+                    }
+                }
+            }
+        }).start();
+
     }
 
+    public void saveInfo(){
+        SharedPreferences.Editor editor = getSharedPreferences("userdata",MODE_PRIVATE).edit();
+        editor.putString("username", _nameText.getText().toString());
+        editor.apply();
 
-    public void onSignupSuccess() {
-        _signupButton.setEnabled(true);
-        setResult(RESULT_OK, null);
-        finish();
-    }
-
-    public void onSignupFailed() {
-        _signupButton.setEnabled(true);
     }
 
     public boolean validate() {

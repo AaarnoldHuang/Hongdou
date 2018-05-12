@@ -1,5 +1,6 @@
 package me.arnoldwho.hongdou;
 
+import android.os.SystemClock;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -25,14 +26,11 @@ public class MySocket2 {
             }
         }
     };
-
-    public void setConnect(){
-        new Thread(connect).start();
-        Log.d("sockett", "connected");
-    }
-
     public String getResponse(String sendData) {
         try{
+            //socket = new Socket("45.63.91.170", 20566);
+            new Thread(connect).start();
+            SystemClock.sleep(1500);
             outputStream = socket.getOutputStream();
             outputStream.write(sendData.getBytes("utf-8"));
             outputStream.flush();

@@ -1,6 +1,7 @@
 package me.arnoldwho.hongdou;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +17,24 @@ public class SplashActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         SystemClock.sleep(1500);
-        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+        firstStart();
         finish();
+    }
+
+    public void firstStart(){
+        SharedPreferences pref = getSharedPreferences("share", MODE_PRIVATE);
+        boolean isFirstRun = pref.getBoolean("isFirstRun", true);
+        SharedPreferences.Editor editor = getSharedPreferences("share", MODE_PRIVATE).edit();
+
+        if (isFirstRun)
+        {
+            editor.putBoolean("isFirstRun", false);
+            editor.apply();
+            startActivity(new Intent(SplashActivity.this, SignupActivity.class));
+        } else
+        {
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+        }
+
     }
 }

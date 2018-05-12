@@ -13,28 +13,16 @@
     </style>
 
     <style name="AppTheme.StartStyle" parent="AppTheme">
-        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowBackground">@drawable/mysplash</item>
     </style>
 
-    <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
 
-        <item name="android:windowBackground">@color/primary</item>
-
-        <item name="colorControlNormal">@color/iron</item>
-        <item name="colorControlActivated">@color/white</item>
-        <item name="colorControlHighlight">@color/white</item>
-        <item name="android:textColorHint">@color/iron</item>
-
-        <item name="colorButtonNormal">@color/primary_darker</item>
-        <item name="android:colorButtonNormal">@color/primary_darker</item>
+    <style name="Hongdou" parent="AppTheme" >
+        <item name="android:colorBackground">@color/background_material_light</item>
+        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
+        <item name="android:textColorSecondary">@color/jet</item>
+        <item name="android:colorForeground">@color/black</item>
+        <item name="android:textColorPrimaryInverse">@color/iron</item>
     </style>
 
-    <style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">
-        <item name="colorAccent">@color/white</item>
-        <item name="android:textColorPrimary">@color/iron</item>
-        <item name="android:background">@color/primary</item>
-    </style>
 </resources>
