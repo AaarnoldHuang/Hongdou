@@ -14,7 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,7 +46,15 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
         TextView nav_name = (TextView)headerView.findViewById(R.id.nav_username);
+        ImageView avatar = (ImageView)headerView.findViewById(R.id.imageView);
         nav_name.setText(getUserName());
+
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SignupActivity.class));
+            }
+        });
     }
 
     public String getUserName(){
@@ -87,20 +97,16 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.mymessages) {
 
         } else if (id == R.id.settings) {
-
-        } else if(id == R.id.login){
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        } else if (id == R.id.signup) {
-            startActivity(new Intent(MainActivity.this, SignupActivity.class));
-        } else if (id == R.id.nav_share) {
+            Toast.makeText(MainActivity.this, "Developing...", Toast.LENGTH_SHORT).show();
+        }else if (id == R.id.nav_share) {
+            Toast.makeText(MainActivity.this, "Developing...", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_send) {
+            Toast.makeText(MainActivity.this, "Developing...", Toast.LENGTH_SHORT).show();
 
         }
 

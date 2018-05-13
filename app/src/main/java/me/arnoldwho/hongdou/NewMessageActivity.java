@@ -1,5 +1,6 @@
 package me.arnoldwho.hongdou;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -60,6 +61,11 @@ public class NewMessageActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case R.id.send:
+                final ProgressDialog progressDialog = new ProgressDialog(NewMessageActivity.this,
+                        R.style.AppTheme_Dark_Dialog);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setMessage(getResources().getString(R.string.Sending));
+                progressDialog.show();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -68,6 +74,7 @@ public class NewMessageActivity extends AppCompatActivity {
                         final String sendtitle = _send_title.getText().toString();
                         final String sendmessage = _send_message.getText().toString();
                         if (sendMessage(username, anoy, sendtitle, sendmessage, socket)){
+                            progressDialog.dismiss();
                             finish();
                         }
                     }
@@ -96,10 +103,8 @@ public class NewMessageActivity extends AppCompatActivity {
             if (response.equals("/GotInfo")){
                 response = mySocket.getResponse(message, socket);
                 if (response.equals("/Successed")){
-                    Log.d("haha", "Success!");
                     return true;
                 } else {
-                    Log.d("haha", "Failed");
                     return false;
                 }
             } else

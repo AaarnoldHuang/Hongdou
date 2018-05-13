@@ -152,8 +152,8 @@ public class SignupActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
         String reEnterPassword = _reEnterPasswordText.getText().toString();
 
-        if (name.isEmpty() || name.length() < 3) {
-            _nameText.setError("at least 3 characters");
+        if (name.isEmpty() || name.length() < 3 || name.contains(" ")) {
+            _nameText.setError("at least 3 characters and can not have any space!");
             valid = false;
         } else {
             _nameText.setError(null);
