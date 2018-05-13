@@ -1,48 +1,80 @@
 package me.arnoldwho.hongdou;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
-
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import java.io.IOException;
 import java.net.Socket;
+
+import butterknife.BindInt;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class NewMessageActivity extends AppCompatActivity {
 
     SendMessages sendMessages = new SendMessages();
     MySocket mySocket = new MySocket();
     Socket socket;
+    String anoy;
+
+    @BindView(R.id.send_title) EditText _send_title;
+    @BindView(R.id.send_message) EditText _send_message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_message);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        final CheckBox anonymous = (CheckBox) findViewById(R.id.checkanonymous);
         new Thread(connect).start();
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        anonymous.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    anoy = "1";
+                    anonymous.setTextColor(getResources().getColor(R.color.accent));
+                }else{
+                    anoy = "0";
+                    anonymous.setTextColor(getResources().getColor(R.color.iron));
+
+                }
+            }
+        });
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.sendtoolbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case R.id.send:
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        if (sendMessage("arnold", "0",
-                                "这是客户端发送的\uD83D\uDE44第一条留言", "这是我用客户端发送的第一条留言" +
-                                        "，纪念一下", socket)){
-                            Toast.makeText(NewMessageActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                        SharedPreferences pref = getSharedPreferences("userdata", MODE_PRIVATE);
+                        String username = pref.getString("username", "");
+                        final String sendtitle = _send_title.getText().toString();
+                        final String sendmessage = _send_message.getText().toString();
+                        if (sendMessage(username, anoy, sendtitle, sendmessage, socket)){
+                            finish();
                         }
                     }
                 }).start();
-            }
-        });
+                break;
+        }
+        return true;
     }
 
     Runnable connect = new Runnable() {

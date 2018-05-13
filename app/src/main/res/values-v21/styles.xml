@@ -13,7 +13,9 @@
     </style>
 
     <style name="AppTheme.StartStyle" parent="AppTheme">
-        <item name="android:windowBackground">@drawable/mysplash</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@drawable/splash</item>
     </style>
 
 
