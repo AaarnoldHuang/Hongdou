@@ -67,7 +67,7 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        onRefresh();
+        //onRefresh();
         return view;
     }
 

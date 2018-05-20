@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(MainActivity.this, "Developing...", Toast.LENGTH_SHORT).show();
         }else if (id == R.id.nav_share) {
             Toast.makeText(MainActivity.this, "Developing...", Toast.LENGTH_SHORT).show();
-
         } else if (id == R.id.nav_send) {
             Toast.makeText(MainActivity.this, "Developing...", Toast.LENGTH_SHORT).show();
 
