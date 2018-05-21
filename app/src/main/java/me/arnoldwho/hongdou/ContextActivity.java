@@ -45,7 +45,17 @@ public class ContextActivity extends AppCompatActivity {
         _context_view.setText(intent.getStringExtra("context"));
         _like_num_view.setText(intent.getStringExtra("like_num"));
         _like_view.setImageResource(R.drawable.icon_like);
-        _avatar_view.setImageResource(R.drawable.ic_women_selected);
+        if (intent.getStringExtra("avatar_num").equals("1")){
+            _avatar_view.setImageResource(R.drawable.avatar1);
+        } else if(intent.getStringExtra("avatar_num").equals("2")){
+            _avatar_view.setImageResource(R.drawable.avatar2);
+        } else if (intent.getStringExtra("avatar_num").equals("3")){
+            _avatar_view.setImageResource(R.drawable.avatar3);
+        } else if (intent.getStringExtra("avatar_num").equals("4")){
+            _avatar_view.setImageResource(R.drawable.avatar4);
+        } else if (intent.getStringExtra("avatar_num").equals("5")){
+            _avatar_view.setImageResource(R.drawable.avatar5);
+        }
     }
 
 }

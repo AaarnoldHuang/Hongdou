@@ -7,13 +7,15 @@ public class Messages {
     public String anonymous;
     public String title;
     public String likes_num;
+    public String avatar;
 
-    public Messages (String id, String userName, String anonymous, String likes_num, String title){
+    public Messages (String id, String userName, String anonymous, String likes_num, String title, String avatar){
         this.id = id;
         this.userName = userName;
         this.anonymous = anonymous;
         this.title = title;
         this.likes_num = likes_num;
+        this.avatar = avatar;
     }
 
     public String getTitles(){
@@ -34,5 +36,9 @@ public class Messages {
 
     public String getLikes_num() {
         return likes_num;
+    }
+
+    public String getAvatar() {
+        return avatar;
     }
 }

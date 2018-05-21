@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -40,6 +41,7 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
     String post_num = "0";
     String[] tempArray1 = new String[10];
     String[][] tempArray2 = new String[10][5];
+    private String clickedID,  clickedTitle,  clickedLikes, clickedAvatar;
     MessageAdapter adapter = new MessageAdapter(messagesList);
     Fragment fragment = new ContextFragment();
     private IntentFilter intentFilter;
@@ -71,6 +73,17 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
         return view;
     }
 
+    Runnable connect = new Runnable() {
+        @Override
+        public void run() {
+            try{
+                socket = new Socket("45.63.91.170", 20566);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
     private class LocalReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(final Context context, final Intent intent) {
@@ -78,9 +91,10 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
             if(!action.equals(LOCAL_BROADCAST)){
                 return ;
             }
-            final String clickedID = intent.getStringExtra("id");
-            final String clickedTitle = intent.getStringExtra("title");
-            final String clickedLikes = intent.getStringExtra("like_num");
+            clickedID = intent.getStringExtra("id");
+            clickedTitle = intent.getStringExtra("title");
+            clickedLikes = intent.getStringExtra("like_num");
+            clickedAvatar = intent.getStringExtra("avatar_num");
             final ProgressDialog progressDialog = new ProgressDialog(getActivity(), R.style.AppTheme_Dark_Dialog);
             progressDialog.setIndeterminate(true);
             progressDialog.setMessage("Loading...");
@@ -96,6 +110,7 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
                         response = mySocket.getResponse(clickedID, socket);
                         try{
                             JSONArray jsonArray = new JSONArray(response);
+                            myContext = "";
                             myContext = jsonArray.getString(0);
                             refreshLayout.setRefreshing(false);
                             adapter.notifyDataSetChanged();
@@ -107,6 +122,7 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
                         intent1.putExtra("title", clickedTitle);
                         intent1.putExtra("like_num", clickedLikes);
                         intent1.putExtra("context", myContext);
+                        intent1.putExtra("avatar_num", clickedAvatar);
                         progressDialog.dismiss();
                         startActivity(intent1);
                     }
@@ -116,16 +132,7 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
 
-    Runnable connect = new Runnable() {
-        @Override
-        public void run() {
-            try{
-                socket = new Socket("45.63.91.170", 20566);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    };
+
 
     @Override
     public void onRefresh() {
@@ -142,10 +149,12 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
                     try{
                         JSONArray jsonArray = new JSONArray(message_info);
                         for (int i = 0; i < jsonArray.length(); i++){
+                            Random r = new Random();
+                            String a = String.valueOf(r.nextInt(5) + 1);
                             tempArray1[i] = jsonArray.getString(i);
                             tempArray2[i] = tempArray1[i].split("\\[|,|\\]");
                             Messages temp = new Messages(tempArray2[i][1], tempArray2[i][2], tempArray2[i][3],
-                                    tempArray2[i][4], tempArray2[i][5]);
+                                    tempArray2[i][4], tempArray2[i][5], a);
                             messagesList.add(temp);
                         }
                         refreshLayout.setRefreshing(false);
@@ -156,6 +165,12 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }
             }
         }).start();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        adapter.notifyDataSetChanged();
     }
 }
 

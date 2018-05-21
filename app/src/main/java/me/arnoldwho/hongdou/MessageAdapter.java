@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Random;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder>{
 
@@ -53,6 +54,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 intent.putExtra("id", messages.getId());
                 intent.putExtra("title", messages.getTitles());
                 intent.putExtra("like_num", messages.getLikes_num());
+                intent.putExtra("avatar_num", messages.getAvatar());
                 Log.d("hahahaha", messages.getLikes_num());
                 localBroadcastManager.sendBroadcast(intent);
             }
@@ -63,10 +65,21 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position){
         Messages messages = myMessagesList.get(position);
+        if (messages.getAvatar().equals("1")){
+            holder._avatar.setImageResource(R.drawable.avatar1);
+        } else if (messages.getAvatar().equals("2")){
+            holder._avatar.setImageResource(R.drawable.avatar2);
+        } else if (messages.getAvatar().equals("3")){
+            holder._avatar.setImageResource(R.drawable.avatar3);
+        } else if (messages.getAvatar().equals("4")){
+            holder._avatar.setImageResource(R.drawable.avatar4);
+        } else if (messages.getAvatar().equals("5")){
+            holder._avatar.setImageResource(R.drawable.avatar5);
+        }
         holder._title.setText(messages.getTitles());
         holder._likes_num.setText(messages.getLikes_num());
-        holder._avatar.setImageResource(R.drawable.ic_women_selected);
         holder._likes.setImageResource(R.drawable.icon_like);
+
     }
 
     @Override
