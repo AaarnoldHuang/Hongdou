@@ -41,6 +41,7 @@
     <string name="sendmessage">讲你所想</string>
     <string name="Anonymous">Anonymous or not</string>
     <string name="Sending">Sending...</string>
+    <string name="send_btn_in_postfgm">Biu~~发送！</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_message_fragment">Developing</string>

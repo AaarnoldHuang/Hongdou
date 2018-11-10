@@ -28,10 +28,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         public ViewHolder(View view) {
             super(view);
-            _avatar = (ImageView) view.findViewById(R.id.avatar);
-            _title = (TextView) view.findViewById(R.id.show_title);
-            _likes = (ImageView) view.findViewById(R.id.likes);
-            _likes_num = (TextView) view.findViewById(R.id.likes_number);
+            _avatar = view.findViewById(R.id.avatar);
+            _title = view.findViewById(R.id.show_title);
+            _likes = view.findViewById(R.id.likes);
+            _likes_num = view.findViewById(R.id.likes_number);
         }
     }
 

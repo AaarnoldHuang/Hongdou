@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewMessageActivity"
-    android:focusable="true"
-    android:focusableInTouchMode="true" >
+    tools:context=".NewPostFragment">
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -53,5 +50,14 @@
         android:text="@string/Anonymous"
         android:checked="false"
         android:textColor="@color/iron"/>
+
+    <Button
+        android:id="@+id/send_btn_in_postfragment"
+        android:layout_width="275dp"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="295dp"
+        android:text="@string/send_btn_in_postfgm" />
 
 </RelativeLayout>

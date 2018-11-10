@@ -1,41 +1,54 @@
 package me.arnoldwho.hongdou;
 
+
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+
 import java.io.IOException;
 import java.net.Socket;
 
-import butterknife.BindInt;
+import androidx.navigation.fragment.NavHostFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class NewMessageActivity extends AppCompatActivity {
+import static android.content.Context.MODE_PRIVATE;
 
-    SendMessages sendMessages = new SendMessages();
-    MySocket mySocket = new MySocket();
-    Socket socket;
-    String anoy;
 
-    @BindView(R.id.send_title) EditText _send_title;
-    @BindView(R.id.send_message) EditText _send_message;
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class NewPostFragment extends Fragment {
+
+    private  View view;
+    private MySocket mySocket = new MySocket();
+    private Socket socket;
+    private String anoy;
+
+    @BindView(R.id.send_title)
+    EditText _send_title;
+    @BindView(R.id.send_message)
+    EditText _send_message;
+    @BindView(R.id.send_btn_in_postfragment)
+    Button _send_btn;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_message);
-        ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        final CheckBox anonymous = (CheckBox) findViewById(R.id.checkanonymous);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_new_post, container, false);
+        ButterKnife.bind(this, view);
+        final CheckBox anonymous = view.findViewById(R.id.checkanonymous);
         new Thread(connect).start();
         anonymous.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -50,18 +63,14 @@ public class NewMessageActivity extends AppCompatActivity {
                 }
             }
         });
+        return view;
     }
 
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.sendtoolbar, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()) {
-            case R.id.send:
-                final ProgressDialog progressDialog = new ProgressDialog(NewMessageActivity.this,
+    @OnClick(R.id.send_btn_in_postfragment)
+    public void onButtonClick(View view) {
+        switch (view.getId()){
+            case R.id.send_btn_in_postfragment:
+                final ProgressDialog progressDialog = new ProgressDialog(view.getContext(),
                         R.style.AppTheme_Dark_Dialog);
                 progressDialog.setIndeterminate(true);
                 progressDialog.setMessage(getResources().getString(R.string.Sending));
@@ -69,19 +78,18 @@ public class NewMessageActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        SharedPreferences pref = getSharedPreferences("userdata", MODE_PRIVATE);
+                        SharedPreferences pref = NewPostFragment.this.getContext().getSharedPreferences("userdata", MODE_PRIVATE);
                         String username = pref.getString("username", "");
                         final String sendtitle = _send_title.getText().toString();
                         final String sendmessage = _send_message.getText().toString();
                         if (sendMessage(username, anoy, sendtitle, sendmessage, socket)){
                             progressDialog.dismiss();
-                            finish();
+                            NavHostFragment.findNavController(NewPostFragment.this).navigate(R.id.action_newPostFragment_to_messagesFragment2);
                         }
                     }
                 }).start();
                 break;
         }
-        return true;
     }
 
     Runnable connect = new Runnable() {
@@ -102,14 +110,11 @@ public class NewMessageActivity extends AppCompatActivity {
             response = mySocket.getResponse(str, socket);
             if (response.equals("/GotInfo")){
                 response = mySocket.getResponse(message, socket);
-                if (response.equals("/Successed")){
-                    return true;
-                } else {
-                    return false;
-                }
+                return response.equals("/Successed");
             } else
                 return false;
         } else
             return false;
     }
+
 }

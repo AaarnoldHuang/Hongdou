@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -25,6 +26,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import androidx.navigation.fragment.NavHostFragment;
 
 
 public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -54,9 +57,16 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
-        application = (Application) getActivity().getApplication();
-        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
-        recyclerView = (RecyclerView) view.findViewById(R.id.show_messages);
+        FloatingActionButton fab = view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(MessagesFragment.this).navigate(R.id.action_messagesFragment2_to_newPostFragment);
+            }
+        });
+        application = getActivity().getApplication();
+        refreshLayout = view.findViewById(R.id.refreshLayout);
+        recyclerView = view.findViewById(R.id.show_messages);
         refreshLayout.setOnRefreshListener(this);
         refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark,
                 R.color.accent,R.color.iron);
@@ -69,7 +79,6 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        //onRefresh();
         return view;
     }
 
@@ -144,7 +153,7 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }
                 response = mySocket.getResponse("/getMessages", socket);
                 if (response.equals("/sure")){
-                    final String message_info = mySocket.getResponse(post_num.toString(), socket);
+                    final String message_info = mySocket.getResponse(post_num, socket);
                     messagesList.clear();
                     try{
                         JSONArray jsonArray = new JSONArray(message_info);
