@@ -16,6 +16,8 @@ import java.net.Socket;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.arnoldwho.hongdou.MySocket;
+import me.arnoldwho.hongdou.R;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -84,7 +86,7 @@ public class SignupActivity extends AppCompatActivity {
         @Override
         public void run() {
             try{
-                socket = new Socket("45.63.91.170", 20566);
+                socket = new Socket("167.179.72.106", 20566);
             } catch (IOException e) {
                 e.printStackTrace();
             }

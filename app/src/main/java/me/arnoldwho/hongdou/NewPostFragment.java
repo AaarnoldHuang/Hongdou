@@ -22,6 +22,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.arnoldwho.hongdou.MySocket;
+import me.arnoldwho.hongdou.R;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -96,7 +98,7 @@ public class NewPostFragment extends Fragment {
         @Override
         public void run() {
             try{
-                socket = new Socket("45.63.91.170", 20566);
+                socket = new Socket("167.179.72.106", 20566);
             } catch (IOException e) {
                 e.printStackTrace();
             }

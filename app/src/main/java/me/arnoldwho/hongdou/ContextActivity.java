@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.arnoldwho.hongdou.R;
 
 public class ContextActivity extends AppCompatActivity {
     @BindView(R.id.title_view) TextView _tilte_view;

@@ -56,7 +56,7 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
-        View view = inflater.inflate(R.layout.fragment_messages, container, false);
+        view = inflater.inflate(R.layout.fragment_messages, container, false);
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +86,7 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
         @Override
         public void run() {
             try{
-                socket = new Socket("45.63.91.170", 20566);
+                socket = new Socket("167.179.72.106", 20566);
             } catch (IOException e) {
                 e.printStackTrace();
             }

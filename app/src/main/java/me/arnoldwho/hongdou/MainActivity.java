@@ -19,6 +19,8 @@ import android.widget.Toast;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
+import me.arnoldwho.hongdou.R;
+import me.arnoldwho.hongdou.SignupActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -89,18 +91,6 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.mymessages) {
-
-        } else if (id == R.id.settings) {
-            Toast.makeText(MainActivity.this, "Developing...", Toast.LENGTH_SHORT).show();
-        }else if (id == R.id.nav_share) {
-            Toast.makeText(MainActivity.this, "Developing...", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_send) {
-            Toast.makeText(MainActivity.this, "Developing...", Toast.LENGTH_SHORT).show();
-
-        }
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

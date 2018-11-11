@@ -5,7 +5,7 @@ import java.net.Socket;
 
 public class SendMessages {
 
-    MySocket mySocket = new MySocket();
+    me.arnoldwho.hongdou.MySocket mySocket = new me.arnoldwho.hongdou.MySocket();
 
     public boolean sendMessage(String username, String anonymous, String title, String message, Socket socket){
         String response = mySocket.getResponse("/newMessage", socket);

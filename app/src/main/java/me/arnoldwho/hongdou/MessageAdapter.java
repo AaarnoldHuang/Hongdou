@@ -15,9 +15,13 @@ import android.widget.Toast;
 import java.util.List;
 import java.util.Random;
 
+import me.arnoldwho.hongdou.Messages;
+import me.arnoldwho.hongdou.MessagesFragment;
+import me.arnoldwho.hongdou.R;
+
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder>{
 
-    private List<Messages> myMessagesList;
+    private List<me.arnoldwho.hongdou.Messages> myMessagesList;
     private LocalBroadcastManager localBroadcastManager;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
