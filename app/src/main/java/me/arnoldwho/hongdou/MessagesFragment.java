@@ -14,6 +14,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 
@@ -43,6 +46,7 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
     private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerView;
     private Socket socket;
+    private MyHandler myHandler;
     MySocket mySocket = new MySocket();
     String response;
     String myContext;
@@ -65,7 +69,8 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(MessagesFragment.this).navigate(R.id.action_messagesFragment2_to_newPostFragment);
+                NavHostFragment.findNavController(MessagesFragment.this)
+                        .navigate(R.id.action_messagesFragment2_to_newPostFragment);
             }
         });
         application = getActivity().getApplication();
@@ -83,6 +88,7 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        myHandler = new MyHandler();
         return view;
     }
 
@@ -96,56 +102,6 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         }
     };
-
-    private class LocalReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-            String action = intent.getAction();
-            if(!action.equals(LOCAL_BROADCAST)){
-                return ;
-            }
-            clickedID = intent.getStringExtra("id");
-            clickedTitle = intent.getStringExtra("title");
-            clickedLikes = intent.getStringExtra("like_num");
-            clickedAvatar = intent.getStringExtra("avatar_num");
-            final ProgressDialog progressDialog = new ProgressDialog(getActivity(), R.style.AppTheme_Dark_Dialog);
-            progressDialog.setIndeterminate(true);
-            progressDialog.setMessage("Loading...");
-            progressDialog.show();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (!socket.isConnected()){
-                        new Thread(connect).start();
-                    }
-                    response = mySocket.getResponse("/getDetals", socket);
-                    if (response.equals("/sure")){
-                        response = mySocket.getResponse(clickedID, socket);
-                        try{
-                            JSONArray jsonArray = new JSONArray(response);
-                            myContext = "";
-                            myContext = jsonArray.getString(0);
-                            refreshLayout.setRefreshing(false);
-                            adapter.notifyDataSetChanged();
-                        } catch (Exception e){
-                            e.printStackTrace();
-                        }
-                        Intent intent1 = new Intent(getActivity(), ContextActivity.class);
-                        intent1.putExtra("id", clickedID);
-                        intent1.putExtra("title", clickedTitle);
-                        intent1.putExtra("like_num", clickedLikes);
-                        intent1.putExtra("context", myContext);
-                        intent1.putExtra("avatar_num", clickedAvatar);
-                        progressDialog.dismiss();
-                        startActivity(intent1);
-                    }
-                }
-            }).start();
-        }
-    }
-
-
-
 
     @Override
     public void onRefresh() {
@@ -171,7 +127,10 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
                             messagesList.add(temp);
                         }
                         refreshLayout.setRefreshing(false);
-                        adapter.notifyDataSetChanged();
+                        //adapter.notifyDataSetChanged();
+                        Message msg = new Message();
+                        msg.what = 1;
+                        myHandler.sendMessage(msg);
                     } catch (Exception e){
                         e.printStackTrace();
                     }
@@ -185,5 +144,80 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
         super.onResume();
         adapter.notifyDataSetChanged();
     }
+
+    private class LocalReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            String action = intent.getAction();
+            if(!action.equals(LOCAL_BROADCAST)){
+                return ;
+            }
+            clickedID = intent.getStringExtra("id");
+            clickedTitle = intent.getStringExtra("title");
+            clickedLikes = intent.getStringExtra("like_num");
+            clickedAvatar = intent.getStringExtra("avatar_num");
+            final ProgressDialog progressDialog = new ProgressDialog(view.getContext(), R.style.AppTheme_Dark_Dialog);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Loading...");
+            progressDialog.show();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (!socket.isConnected()){
+                        new Thread(connect).start();
+                    }
+                    response = mySocket.getResponse("/getDetals", socket);
+                    if (response.equals("/sure")){
+                        response = mySocket.getResponse(clickedID, socket);
+                        try{
+                            JSONArray jsonArray = new JSONArray(response);
+                            myContext = "";
+                            myContext = jsonArray.getString(0);
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                        Bundle infoBundle = new Bundle();
+                        infoBundle.putString("id", clickedID);
+                        infoBundle.putString("title", clickedTitle);
+                        infoBundle.putString("like_num", clickedLikes);
+                        infoBundle.putString("context", myContext);
+                        infoBundle.putString("avatar_num", clickedAvatar);
+                        Message msg = new Message();
+                        msg.what = 0;
+                        msg.setData(infoBundle);
+                        myHandler.sendMessage(msg);
+                        progressDialog.cancel();
+                    }
+                }
+            }).start();
+        }
+    }
+
+    class MyHandler extends Handler {
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", msg.getData().getString("title"));
+                    bundle.putString("like_num", msg.getData().getString("like_num"));
+                    bundle.putString("context", msg.getData().getString("context"));
+                    bundle.putString("avatar_num", msg.getData().getString("avatar_num"));
+
+                    Navigation.findNavController(view)
+                            .navigate(R.id.action_messagesFragment2_to_contextFragment, bundle);
+                    break;
+                case 1:
+                    adapter.notifyDataSetChanged();
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    }
+
+
 }
 

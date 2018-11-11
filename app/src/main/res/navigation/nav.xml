@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_messagesFragment2_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_messagesFragment2_to_contextFragment"
+            app:destination="@id/contextFragment" />
     </fragment>
     <fragment
         android:id="@+id/newPostFragment"
@@ -33,4 +36,9 @@
         android:name="me.arnoldwho.hongdou.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/contextFragment"
+        android:name="me.arnoldwho.hongdou.ContextFragment"
+        android:label="fragment_context"
+        tools:layout="@layout/fragment_context" />
 </navigation>

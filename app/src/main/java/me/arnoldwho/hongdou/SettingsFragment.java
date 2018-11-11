@@ -16,9 +16,7 @@ import me.arnoldwho.hongdou.R;
 public class SettingsFragment extends Fragment {
 
 
-    public SettingsFragment() {
-        // Required empty public constructor
-    }
+    public SettingsFragment() { }
 
 
     @Override

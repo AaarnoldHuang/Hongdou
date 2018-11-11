@@ -19,6 +19,13 @@ import me.arnoldwho.hongdou.MainActivity;
 import me.arnoldwho.hongdou.MySocket;
 import me.arnoldwho.hongdou.R;
 
+/**
+ 这是用户登陆的Activity
+ @author Arnold (hgx)
+ @version 1.0
+ @see “这是用户登录的Activity，仅在应用第一次运行或用户点击头像更改账户市会启动”
+ */
+
 public class LoginActivity extends AppCompatActivity {
 
     public Socket socket;

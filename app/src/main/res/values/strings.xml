@@ -47,7 +47,7 @@
     <string name="hello_message_fragment">Developing</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">THIS SHOULD BE A SETTINGS FRAGMENT</string>
     <string name="title_activity_context">ContextActivity</string>
 
 </resources>

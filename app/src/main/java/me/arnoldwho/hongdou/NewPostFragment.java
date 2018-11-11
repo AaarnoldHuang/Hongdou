@@ -61,7 +61,6 @@ public class NewPostFragment extends Fragment {
                 }else{
                     anoy = "0";
                     anonymous.setTextColor(getResources().getColor(R.color.iron));
-
                 }
             }
         });
@@ -86,7 +85,7 @@ public class NewPostFragment extends Fragment {
                         final String sendmessage = _send_message.getText().toString();
                         if (sendMessage(username, anoy, sendtitle, sendmessage, socket)){
                             progressDialog.dismiss();
-                            NavHostFragment.findNavController(NewPostFragment.this).navigate(R.id.action_newPostFragment_to_messagesFragment2);
+                           // NavHostFragment.findNavController(NewPostFragment.this).navigateUp();
                         }
                     }
                 }).start();

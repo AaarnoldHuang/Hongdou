@@ -12,7 +12,10 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="121dp"
-        android:layout_marginTop="14dp" />
+        android:layout_marginTop="14dp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="30dp" />
 
     <ImageView
         android:id="@+id/avatar_view"
@@ -28,20 +31,26 @@
         android:layout_height="352dp"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/title_view"
-        android:layout_marginStart="66dp" />
+        android:layout_marginStart="66dp"
+        android:textColor="@color/black"
+        android:textSize="20dp"/>
 
     <ImageView
         android:id="@+id/like_view"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:layout_below="@+id/conetxt_view"
         android:layout_toStartOf="@+id/like_num_view" />
 
     <TextView
         android:id="@+id/like_num_view"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:layout_alignEnd="@+id/conetxt_view"
-        android:layout_below="@+id/conetxt_view" />
+        android:layout_below="@+id/conetxt_view"
+        android:textColor="@color/black"
+        android:textSize="17dp"
+        android:gravity="center"/>
+
 
 </RelativeLayout>

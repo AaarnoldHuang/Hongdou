@@ -54,10 +54,11 @@
     <Button
         android:id="@+id/send_btn_in_postfragment"
         android:layout_width="275dp"
-        android:layout_height="55dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="295dp"
-        android:text="@string/send_btn_in_postfgm" />
+        android:text="@string/send_btn_in_postfgm"
+        android:layout_below="@id/checkanonymous"/>
 
 </RelativeLayout>

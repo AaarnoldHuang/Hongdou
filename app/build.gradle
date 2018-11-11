@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 27
@@ -35,7 +36,7 @@ dependencies {
     implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha07'
     implementation 'android.arch.navigation:navigation-ui:1.0.0-alpha07'
     implementation "android.arch.paging:runtime:1.0.1"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 repositories {
     mavenCentral()
