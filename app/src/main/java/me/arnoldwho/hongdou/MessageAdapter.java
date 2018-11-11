@@ -21,7 +21,7 @@ import me.arnoldwho.hongdou.R;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder>{
 
-    private List<me.arnoldwho.hongdou.Messages> myMessagesList;
+    private List<Messages> myMessagesList;
     private LocalBroadcastManager localBroadcastManager;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -59,7 +59,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 intent.putExtra("title", messages.getTitles());
                 intent.putExtra("like_num", messages.getLikes_num());
                 intent.putExtra("avatar_num", messages.getAvatar());
-                Log.d("hahahaha", messages.getLikes_num());
                 localBroadcastManager.sendBroadcast(intent);
             }
         });
